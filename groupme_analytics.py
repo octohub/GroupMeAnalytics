@@ -15,6 +15,7 @@ at = ""  # this is a global variable that stores the API token
 # let's get some OO design up in here. Having all this data stored in a dictionary is a bit cumbersome. e.g. having to
 # remember where exactly a piece of data is stored based simply on index is just bad.
 
+# random comment
 def menu():
     global at
     print('If you have not done so already, go to the following website to receive your API token: ' +
