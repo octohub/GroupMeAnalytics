@@ -5,17 +5,7 @@ from pprint import pprint
 
 at = ""  # this is a global variable that stores the API token
 
-# one user in my group has two different user ids, unsure why this is, but implement option to merge two users if their
-#nickname is the same, so as the messages are being analyzed, pop up a message to the user asking if they want to merge
-#the user
 
-# see how name changing works, it should be fine because it goes by sender id, but confirm that changing name won't
-# screw things up
-
-# let's get some OO design up in here. Having all this data stored in a dictionary is a bit cumbersome. e.g. having to
-# remember where exactly a piece of data is stored based simply on index is just bad.
-
-# random comment
 def menu():
     global at
     print('If you have not done so already, go to the following website to receive your API token: ' +
@@ -44,25 +34,74 @@ def print_all_groups_with_number_beside_each():
     return data
 
 
+def get_group_id(groups_data, group_number):
+
+    group_id = groups_data['response'][group_number]['id']
+    return group_id
+
+
 def prepare_analysis_of_group(groups_data, group_id):
+    # these three lines simply display info to the user before the analysis begins
     group_name = get_group_name(groups_data, group_id)
     number_of_messages = get_number_of_messages_in_group(groups_data, group_id)
     print("Analyzing "+str(number_of_messages) + " messages from " + group_name)
+    #these two lines put all the members currently in the group into a dictionary
     members_of_group_data = get_group_members(groups_data, group_id)
     user_dictionary = prepare_user_dictionary(members_of_group_data)
 
-    analyze_group(group_id, user_dictionary, number_of_messages)
+    user_id_mapped_to_user_data = analyze_group(group_id, user_dictionary, number_of_messages)
+    display_data(user_id_mapped_to_user_data)
+
+
+def get_group_name(groups_data, group_id):
+    i = 0
+    while True:
+        if group_id == groups_data['response'][i]['group_id']:
+            return groups_data['response'][i]['name']
+        i += 1
+
+
+def get_number_of_messages_in_group(groups_data, group_id):
+    i = 0
+    while True:
+        if group_id == groups_data['response'][i]['group_id']:
+            return groups_data['response'][i]['messages']['count']
+        i += 1
+
+
+def get_group_members(groups_data, group_id):
+    i = 0
+    while True:
+        if group_id == groups_data['response'][i]['group_id']:
+            return groups_data['response'][i]['members']
+        i += 1
+
+
+def prepare_user_dictionary(members_of_group_data):
+    user_dictionary = {}
+    i = 0
+    while True:
+        try:
+            user_id = members_of_group_data[i]['user_id']
+            nickname = members_of_group_data[i]['nickname']
+            user_dictionary[user_id] = [nickname, 0.0, 0.0, 0.0, 0.0, {}, {}, 0.0]
+            # [0] = nickname, [1] = total messages sent in group, like count, [2] = likes per message,
+            # [3] = total sent messages, [4] = total words sent, [5] = dictionary of likes received from each member
+            # [6] = dictionary of shared likes, [7] = total likes given
+
+        except IndexError:  # it will reach here when it gets to the end of the members
+            return user_dictionary
+        i += 1
+    return user_dictionary
 
 
 def analyze_group(group_id, user_id_mapped_to_user_data, number_of_messages):
 
     response = requests.get('https://api.groupme.com/v3/groups/'+group_id+'/messages?token='+at)
     data = response.json()
-    # declare 'message_with_only_alphanumeric_characters' and 'message_id' here to get rid of 'might be referenced
-    # before assignment warning
     message_with_only_alphanumeric_characters = ''
     message_id = 0
-    iterations = 0.0  # make this a double in order to print out 'percent done' message to user
+    iterations = 0.0
     while True:
         for i in range(20):  # in range of 20 because API sends 20 messages at once
             try:
@@ -83,13 +122,6 @@ def analyze_group(group_id, user_id_mapped_to_user_data, number_of_messages):
 
                 #grabs the number of words in message
                 number_of_words_in_message = len(re.findall(r'\w+', str(message_with_only_alphanumeric_characters)))
-
-                # check if the key exists, if not, check if any current key in the dictionary has the same nickname
-                # if another key has the same nickname, DONT create a new dictionary entry
-                # ask the user if they would like to merge, present user with option
-                # instead, create a new dictionary that has original keys that maps to a list of duplicates
-                # use this dictionary for the logic when adding stats
-                # if a duplicate nickname does not exist, then simply create a new entry
 
                 if sender_id not in user_id_mapped_to_user_data.keys():
                     user_id_mapped_to_user_data[sender_id] = [name, 0.0, 0.0, 0.0, 0.0, {}, {}, 0.0]
@@ -129,9 +161,7 @@ def analyze_group(group_id, user_id_mapped_to_user_data, number_of_messages):
                 for key in user_id_mapped_to_user_data:
                     user_id_mapped_to_user_data[key][3] = \
                         user_id_mapped_to_user_data[key][2] / user_id_mapped_to_user_data[key][1]
-                display_data(user_id_mapped_to_user_data)
-                #pprint(user_id_mapped_to_user_data)
-                return
+                return user_id_mapped_to_user_data
 
             if i == 19:
                 message_id = data['response']['messages'][i]['id']
@@ -144,10 +174,9 @@ def analyze_group(group_id, user_id_mapped_to_user_data, number_of_messages):
         response = requests.get('https://api.groupme.com/v3/groups/'+group_id+'/messages?token='+at, params=payload)
         data = response.json()
 
+
 def display_data(user_id_mapped_to_user_data):
-    pprint(user_id_mapped_to_user_data)
-    # change all this so that grab the values at the start, instead of doing dictionary references throughout
-    # will make it easier to read
+
     for key in user_id_mapped_to_user_data:
         print(user_id_mapped_to_user_data[key][0] + ' Data:')
         print('Messages Sent: ' + str(user_id_mapped_to_user_data[key][1]))
@@ -200,56 +229,10 @@ def display_data(user_id_mapped_to_user_data):
             sys.stdout.write(str(percent_shared)+'%, ')
         print
         print
+    #uncomment this line below to view the raw dictionary
+    #pprint(user_id_mapped_to_user_data)
 
-
-def get_group_name(groups_data, group_id):
-    i = 0
-    while True:
-        if group_id == groups_data['response'][i]['group_id']:
-            return groups_data['response'][i]['name']
-        i += 1
-
-
-def get_number_of_messages_in_group(groups_data, group_id):
-    i = 0
-    while True:
-        if group_id == groups_data['response'][i]['group_id']:
-            return groups_data['response'][i]['messages']['count']
-        i += 1
-
-
-def get_group_members(groups_data, group_id):
-    i = 0
-    while True:
-        if group_id == groups_data['response'][i]['group_id']:
-            return groups_data['response'][i]['members']
-        i += 1
-
-
-def prepare_user_dictionary(members_of_group_data):  # think about doing away with this method complettly
-    user_dictionary = {}  # just add the users on the fly instead, though then users that are part of group
-    i = 0   #that have not liked anything or sent any messages will not show up, so this is bad
-    while True:
-        try:
-            user_id = members_of_group_data[i]['user_id']
-            nickname = members_of_group_data[i]['nickname']
-            user_dictionary[user_id] = [nickname, 0.0, 0.0, 0.0, 0.0, {}, {}, 0.0]
-            # [0] = nickname, [1] = total messages sent in group, like count, [2] = likes per message,
-            # [3] = total sent messages, [4] = total words sent, [5] = dictionary of likes received from each member
-            # [6] = dictionary of shared likes, [7] = total likes given
-
-        except IndexError:  # it will reach here when it gets to the end of the members
-            return user_dictionary
-        i += 1
-    return user_dictionary
-
-
-def get_group_id(groups_data, group_number):
-
-    group_id = groups_data['response'][group_number]['id']
-    return group_id
-
-
+#this method call is here so the program starts right when you run it.
 menu()
 
 
