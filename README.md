@@ -3,8 +3,7 @@ GroupMeAnalytics
 
 Groupme (https://groupme.com/) provides an awesome API (https://dev.groupme.com/docs/v3) that allows users to parse conversations in groups they are a part of.
 
-What information does it give me about my conversations?  
--For each user it gives you the following information:  
+What information does it give me about the members in my groups?  
 -Number of messages sent.  
 -Total Likes Given.  
 -Self Likes. (special rung in hell for people that like their own messages)
