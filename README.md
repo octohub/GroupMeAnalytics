@@ -22,8 +22,9 @@ Groupme (https://groupme.com/) provides an awesome API (https://dev.groupme.com/
 -Get your groupme API key using your regular account credentials by logging in here: https://dev.groupme.com/session/new  
 -Click the shiny orange button "Create Application" and fill out the form. Doesn't matter what you put in these fields, for the callback URL you can simply put in "https://example.com/oauth_callback"  
 -After that, go to your application page and you will see your access token  
--Grab python 2.7.x (not compatible with python 3.4.x) from here: https://www.python.org/downloads/  
--Clone the code from this repo and copy in your API token when the python app prompts you  
+-Grab python 2.7.x (this app is not compatible with python 3.4.x) from here: https://www.python.org/downloads/  
+-Clone the repo and open the "groupme_analytics.py" file using with your Python IDE of choice. I recommend PyCharm. The Community Edition is free and you can grab that here: http://www.jetbrains.com/pycharm/download/  
+-Run the app, give your API key when prompted, and watch the magic!
 
 **Help!**  
 Feel free to reach out to me on github or twitter(https://twitter.com/dickclucas).
