@@ -28,7 +28,7 @@ Groupme (https://groupme.com/) provides an awesome API (https://dev.groupme.com/
 **Help!**  
 Feel free to reach out to me on github or twitter(https://twitter.com/dickclucas).
   
-**Here is data from one of my groups (with names changed of course):**
+**Here is data from one of my groups (with names changed of course):**  
 Bob Data:  
 Messages Sent: 522.0  
 Total Likes Given: 870.0  
