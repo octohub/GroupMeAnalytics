@@ -207,7 +207,7 @@ Number of times you liked the same post as another member and what percent of th
 Bob: 48, 39.02%, John: 40, 32.52%, Tim: 40, 32.52%, Philip: 31, 25.2%, Jane: 2, 1.63%, Mary: 86, 69.92%, Patrick: 84, 68.29%, Anthony: 29, 23.58%, Morgan: 19, 15.45%,
 
 
-**Make this all seem official**
+**Make this all seem official**  
 The MIT License (MIT)
 
 Copyright (c) 2014 Richard Lucas
