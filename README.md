@@ -26,7 +26,6 @@ Groupme (https://groupme.com/) provides an awesome API (https://dev.groupme.com/
 -Clone the code from this repo and copy in your API token when the python app prompts you  
   
 **Here is data from one of my groups (with names changed of course):**
-
 Bob Data:  
 Messages Sent: 522.0  
 Total Likes Given: 870.0  
