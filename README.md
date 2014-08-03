@@ -4,18 +4,18 @@ GroupMeAnalytics
 Groupme (https://groupme.com/) provides an awesome API (https://dev.groupme.com/docs/v3) that allows users to parse conversations in groups they are a part of.
 
 What information does it give me about my conversations?  
-For each user it gives you the following information:  
-Number of messages sent.  
-Total Likes Given.  
-Self Likes. (special rung in hell for people that like their own messages)
-Total Likes Received.  
-Average Likes Received Per Message.  
-Total Likes Received with Self Likes Subtracted.  (because inflating your numbers isn't cool)  
-Average Likes Received Per Message with Self Likes Subtracted.  
-Total Words Sent.  
-Likes Received from each member and also what percent of the total likes received is from said member.  
-Percent of each member's total likes that went to a particular member.  
-Number of times you liked the same post as another member and what percent of the posts you liked were liked by that same member.  
+-For each user it gives you the following information:  
+-Number of messages sent.  
+-Total Likes Given.  
+-Self Likes. (special rung in hell for people that like their own messages)
+-Total Likes Received.  
+-Average Likes Received Per Message.  
+-Total Likes Received with Self Likes Subtracted.  (because inflating your numbers isn't cool)  
+-Average Likes Received Per Message with Self Likes Subtracted.  
+-Total Words Sent.  
+-Likes Received from each member and also what percent of the total likes received is from said member.  
+-Percent of each member's total likes that went to a particular member.  
+-Number of times you liked the same post as another member and what percent of the posts you liked were liked by that same member.  
 
 
 
