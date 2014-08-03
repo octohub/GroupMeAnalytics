@@ -204,4 +204,28 @@ Bob : 51, 16.89%, John : 18, 5.96%, Tim : 20, 6.62%, Philip : 23, 7.62%, Jane : 
 Percent of each member's total likes that went to Paul:   
 Bob: 5.86%, John: 4.88%, Tim: 5.93%, Philip: 15.75%, Jane: 3.17%, Mary: 5.6%, Patrick: 7.64%, Anthony: 4.18%, Morgan: 11.36%, Paul: 8.94%,   
 Number of times you liked the same post as another member and what percent of the posts you liked were liked by that same member:   
-Bob: 48, 39.02%, John: 40, 32.52%, Tim: 40, 32.52%, Philip: 31, 25.2%, Jane: 2, 1.63%, Mary: 86, 69.92%, Patrick: 84, 68.29%, Anthony: 29, 23.58%, Morgan: 19, 15.45%,   
+Bob: 48, 39.02%, John: 40, 32.52%, Tim: 40, 32.52%, Philip: 31, 25.2%, Jane: 2, 1.63%, Mary: 86, 69.92%, Patrick: 84, 68.29%, Anthony: 29, 23.58%, Morgan: 19, 15.45%,
+
+
+**Make this all seem official**
+The MIT License (MIT)
+
+Copyright (c) 2014 Richard Lucas
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
