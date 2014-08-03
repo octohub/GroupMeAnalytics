@@ -25,7 +25,7 @@ Groupme (https://groupme.com/) provides an awesome API (https://dev.groupme.com/
 -Grab python 2.7.x (not compatible with python 3.4.x) from here: https://www.python.org/downloads/  
 -Clone the code from this repo and copy in your API token when the python app prompts you  
 
-**Help!**
+**Help!**  
 Feel free to reach out to me on github or twitter(https://twitter.com/dickclucas).
   
 **Here is data from one of my groups (with names changed of course):**
