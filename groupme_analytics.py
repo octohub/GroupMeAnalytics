@@ -45,11 +45,15 @@ def prepare_analysis_of_group(groups_data, group_id):
     group_name = get_group_name(groups_data, group_id)
     number_of_messages = get_number_of_messages_in_group(groups_data, group_id)
     print("Analyzing "+str(number_of_messages) + " messages from " + group_name)
+
     #these two lines put all the members currently in the group into a dictionary
     members_of_group_data = get_group_members(groups_data, group_id)
     user_dictionary = prepare_user_dictionary(members_of_group_data)
 
+    #this line calls the "analyze_group" method which goes through the entire conversation
     user_id_mapped_to_user_data = analyze_group(group_id, user_dictionary, number_of_messages)
+
+    #this line displays the data to the user
     display_data(user_id_mapped_to_user_data)
 
 
