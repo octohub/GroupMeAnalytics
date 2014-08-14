@@ -90,7 +90,7 @@ def prepare_user_dictionary(members_of_group_data):
             nickname = members_of_group_data[i]['nickname']
             user_dictionary[user_id] = [nickname, 0.0, 0.0, 0.0, 0.0, {}, {}, 0.0]
             # [0] = nickname, [1] = total messages sent in group, like count, [2] = likes per message,
-            # [3] = total sent messages, [4] = total words sent, [5] = dictionary of likes received from each member
+            # [3] = average likes received per message, [4] = total words sent, [5] = dictionary of likes received from each member
             # [6] = dictionary of shared likes, [7] = total likes given
 
         except IndexError:  # it will reach here when it gets to the end of the members
@@ -163,11 +163,13 @@ def analyze_group(group_id, user_id_mapped_to_user_data, number_of_messages):
                 print("COMPLETE")
                 print
                 for key in user_id_mapped_to_user_data:
-                    user_id_mapped_to_user_data[key][3] = \
-                        user_id_mapped_to_user_data[key][2] / user_id_mapped_to_user_data[key][1]
+                    try:
+                        user_id_mapped_to_user_data[key][3] = user_id_mapped_to_user_data[key][2] / user_id_mapped_to_user_data[key][1]
+                    except ZeroDivisionError:  # for the case where the user has sent 0 messages
+                        user_id_mapped_to_user_data[key][3] = 0
                 return user_id_mapped_to_user_data
 
-            if i == 19:
+        if i == 19:
                 message_id = data['response']['messages'][i]['id']
                 remaining = iterations/number_of_messages
                 remaining *= 100
@@ -198,7 +200,10 @@ def display_data(user_id_mapped_to_user_data):
               str(user_id_mapped_to_user_data[key][2] - self_likes))
 
         total_likes_minus_self_likes = user_id_mapped_to_user_data[key][2] - self_likes
-        new_avg = total_likes_minus_self_likes / user_id_mapped_to_user_data[key][1]
+        try:
+            new_avg = total_likes_minus_self_likes / user_id_mapped_to_user_data[key][1]
+        except ZeroDivisionError:  # for the case where the user has sent 0 messages
+            new_avg = 0
         print('Average Likes Received Per Message with Self Likes Subtracted: '
               + str(new_avg))
 
