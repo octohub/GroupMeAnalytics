@@ -6,7 +6,7 @@ Groupme (https://groupme.com/) provides an awesome API (https://dev.groupme.com/
 **What information does it give me about the members in my groups?**  
 -Number of messages sent.  
 -Total Likes Given.  
--Self Likes. (special rung in hell for people that like their own messages)
+-Self Likes. (special rung in hell for people that like their own messages)  
 -Total Likes Received.  
 -Average Likes Received Per Message.  
 -Total Likes Received with Self Likes Subtracted.  (because inflating your numbers isn't cool)  
