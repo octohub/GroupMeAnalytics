@@ -22,7 +22,7 @@ def menu():
 
 
 def print_all_groups_with_number_beside_each():
-    response = requests.get('https://api.groupme.com/v3/groups/?token='+at)
+    response = requests.get('https://api.groupme.com/v3/groups?token='+at)
     data = response.json()
 
     if len(data['response']) == 0:
