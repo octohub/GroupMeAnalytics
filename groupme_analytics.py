@@ -79,7 +79,7 @@ def analyze_group(group, users, message_count):
 
         message_id = messages[-1]["id"]  # Get last message's ID for next request
         remaining = 100 * message_number / message_count
-        print("\r%.2f%% done" % remaining, end="")
+        print("%.2f%% done\r" % remaining, end="")
     return users
 
 
