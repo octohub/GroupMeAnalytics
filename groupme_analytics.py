@@ -18,7 +18,7 @@ def log_groups(groups):
 
 
 def new_user(name):
-    return {"name": name, "messages_sent": 0, "likes_given": 0, "likes_per_message": 0.0, "words_sent": 0, "likes_by_member": {}, "shared_likes": {}}
+    return {"name": name, "messages_sent": 0, "likes_given": 0, "likes_per_message": 0.0, "words_sent": 0, "likes_by_member": {}, "shared_likes": {}, "self_likes": 0}
 
 
 def prepare_user_dictionary(members):
@@ -59,35 +59,28 @@ def analyze_group(group_id, users, message_count):
                     users[sender_id]['name'] = name
 
                 for user_id in likers:
-                    if user_id in users[sender_id][5].keys():
-                        users[sender_id][5][user_id] += 1
-                    else:
-                        users[sender_id][5][user_id] = 1
+                    users[sender_id]['likes_by_member'][user_id] += 1
 
+                # Count shared likes
                 for user_id in likers:
                     for user_id_inner in likers:
                         if user_id not in users.keys():
-                            # leave name blank because this means a user is has liked a message but has yet to be added
-                            # to the dictionary. So leave the name blank until they send their first message.
-                            users[user_id] = ['', 0.0, 0.0, 0.0, 0.0, {}, {}, 0.0]
+                            # Leave name blank for now
+                            users[user_id] = new_user('')
                         if user_id == user_id_inner:
-                            users[user_id][7] += 1
+                            users[user_id]["self_likes"] += 1
                             continue  # pass because you don't want to count yourself as sharing likes with yourself
-                        try:
-                            users[user_id][6][user_id_inner] += 1
-                        except KeyError:
-                            users[user_id][6][user_id_inner] = 1
-
-                users[sender_id][1] += 1  # add one to sent message count
-                users[sender_id][2] += len(likers)
-                users[sender_id][4] += message_word_count
+                        users[user_id]["shared_likes"][user_id_inner] += 1
+                users[sender_id]["messages_sent"] += 1  # add one to sent message count
+                users[sender_id]["likes_per_message"] += len(likers)
+                users[sender_id]["words_sent"] += message_word_count
 
             message_id = messages[-1]["id"]  # Get last message"s ID for next request
-            remaining = 100 *  message_number / message_count
+            remaining = 100 * message_number / message_count
             print("\r%.2f%% done" % remaining, end="")
 
-def display_data(users):
 
+def display_data(users):
     for key in users:
         print(users[key][0] + ' Data:')
         print('Messages Sent: ' + str(users[key][1]))
