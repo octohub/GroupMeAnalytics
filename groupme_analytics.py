@@ -26,16 +26,18 @@ def prepare_user_dictionary(members):
 
 
 def analyze_group(group_id, user_id_mapped_to_user_data, number_of_messages):
-
-    response = requests.get('https://api.groupme.com/v3/groups/'+group_id+'/messages?token='+TOKEN)
-    data = response.json()
-    message_with_only_alphanumeric_characters = ''
     message_id = 0
-    iterations = 0.0
-    while True:
-        for i in range(20):  # in range of 20 because API sends 20 messages at once
-            try:
-
+    message_number = 0
+    while message_number < message_count:
+        params = {
+            # Get maximum number of messages at a time
+            "limit": 100,
+        }
+        if message_id:
+            params["before_id"] = message_id
+        response = requests.get("https://api.groupme.com/v3/groups/%d/messages?token=%s" % (group_id, at), params=params)
+        messages = response.json()["response"]["messages"]
+        for message in messages:
                 iterations += 1
                 name = data['response']['messages'][i]['name']  # grabs name of sender
                 message = data['response']['messages'][i]['text']  # grabs text of message
@@ -85,15 +87,14 @@ def analyze_group(group_id, user_id_mapped_to_user_data, number_of_messages):
                 user_id_mapped_to_user_data[sender_id][2] += length_of_favs
                 user_id_mapped_to_user_data[sender_id][4] += number_of_words_in_message
 
-            except IndexError:
-                print("COMPLETE")
-                print
-                for key in user_id_mapped_to_user_data:
-                    try:
-                        user_id_mapped_to_user_data[key][3] = user_id_mapped_to_user_data[key][2] / user_id_mapped_to_user_data[key][1]
-                    except ZeroDivisionError:  # for the case where the user has sent 0 messages
-                        user_id_mapped_to_user_data[key][3] = 0
-                return user_id_mapped_to_user_data
+        print("COMPLETE")
+        print
+        for key in user_id_mapped_to_user_data:
+            try:
+                user_id_mapped_to_user_data[key][3] = user_id_mapped_to_user_data[key][2] / user_id_mapped_to_user_data[key][1]
+            except ZeroDivisionError:  # for the case where the user has sent 0 messages
+                user_id_mapped_to_user_data[key][3] = 0
+        return user_id_mapped_to_user_data
 
         if i == 19:
                 message_id = data['response']['messages'][i]['id']
