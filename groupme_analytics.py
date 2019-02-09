@@ -18,24 +18,13 @@ def log_groups(groups):
 
 
 def new_user(name):
-    return
+    return {"name": name, "messages_sent": 0, "likes_given": 0, "likes_per_message": 0.0, "words_sent": 0, "likes_by_member": {}, "shared_likes": {}}
 
 
-def prepare_user_dictionary(group_members):
+def prepare_user_dictionary(members):
     user_dictionary = {}
-    i = 0
-    while True:
-        try:
-            user_id = group_members[i]['user_id']
-            nickname = group_members[i]['nickname']
-            user_dictionary[user_id] = [nickname, 0.0, 0.0, 0.0, 0.0, {}, {}, 0.0]
-            # [0] = nickname, [1] = total messages sent in group, like count, [2] = likes per message,
-            # [3] = average likes received per message, [4] = total words sent, [5] = dictionary of likes received from each member
-            # [6] = dictionary of shared likes, [7] = total likes given
-
-        except IndexError:  # it will reach here when it gets to the end of the members
-            return user_dictionary
-        i += 1
+    for member in members:
+        user_dictionary[member['user_id']] = new_user(member['name'])
     return user_dictionary
 
 
@@ -202,8 +191,8 @@ number_of_messages = group['messages']['count']
 print("Analyzing %d messages from %s" % (number_of_messages, group_name))
 
 # Put all the members currently in group into a dict
-group_members = group['members']
-user_dictionary = prepare_user_dictionary(group_members)
+members = group['members']
+user_dictionary = prepare_user_dictionary(members)
 
 # Iterate through messages to collect data
 user_id_mapped_to_user_data = analyze_group(group_id, user_dictionary, number_of_messages)
