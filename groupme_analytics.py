@@ -13,9 +13,8 @@ def log_groups(groups):
     if len(groups) == 0:
         print("You are not part of any groups.")
         return
-    for i in range(len(groups)):
-        group = groups[i]['name']
-        print(str(i)+"\'"+group+"\'")
+    for i, group in enumerate(groups):
+        print('%d. %s' % (i, group['name'))
 
 
 def get_group_id(groups, group_number):
