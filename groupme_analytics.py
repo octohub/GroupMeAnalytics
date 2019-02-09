@@ -4,36 +4,34 @@ import sys
 from pprint import pprint
 
 
-def menu():
+def get_groups():
+    response = requests.get('https://api.groupme.com/v3/groups?token='+TOKEN)
+    return response.json()['response']
 
 
-def print_all_groups_with_number_beside_each():
-    response = requests.get('https://api.groupme.com/v3/groups?token='+at)
-    data = response.json()
-
-    if len(data['response']) == 0:
+def log_groups(groups):
+    if len(groups) == 0:
         print("You are not part of any groups.")
         return
-    for i in range(len(data['response'])):
-        group = data['response'][i]['name']
+    for i in range(len(groups)):
+        group = groups[i]['name']
         print(str(i)+"\'"+group+"\'")
-    return data
 
 
-def get_group_id(groups_data, group_number):
+def get_group_id(groups, group_number):
 
-    group_id = groups_data['response'][group_number]['id']
+    group_id = groups['response'][group_number]['id']
     return group_id
 
 
-def prepare_analysis_of_group(groups_data, group_id):
+def prepare_analysis_of_group(groups, group_id):
     # these three lines simply display info to the user before the analysis begins
-    group_name = get_group_name(groups_data, group_id)
-    number_of_messages = get_number_of_messages_in_group(groups_data, group_id)
+    group_name = get_group_name(groups, group_id)
+    number_of_messages = get_number_of_messages_in_group(groups, group_id)
     print("Analyzing "+str(number_of_messages) + " messages from " + group_name)
 
     #these two lines put all the members currently in the group into a dictionary
-    members_of_group_data = get_group_members(groups_data, group_id)
+    members_of_group_data = get_group_members(groups, group_id)
     user_dictionary = prepare_user_dictionary(members_of_group_data)
 
     #this line calls the "analyze_group" method which goes through the entire conversation
@@ -43,27 +41,27 @@ def prepare_analysis_of_group(groups_data, group_id):
     display_data(user_id_mapped_to_user_data)
 
 
-def get_group_name(groups_data, group_id):
+def get_group_name(groups, group_id):
     i = 0
     while True:
-        if group_id == groups_data['response'][i]['group_id']:
-            return groups_data['response'][i]['name']
+        if group_id == groups['response'][i]['group_id']:
+            return groups['response'][i]['name']
         i += 1
 
 
-def get_number_of_messages_in_group(groups_data, group_id):
+def get_number_of_messages_in_group(groups, group_id):
     i = 0
     while True:
-        if group_id == groups_data['response'][i]['group_id']:
-            return groups_data['response'][i]['messages']['count']
+        if group_id == groups['response'][i]['group_id']:
+            return groups['response'][i]['messages']['count']
         i += 1
 
 
-def get_group_members(groups_data, group_id):
+def get_group_members(groups, group_id):
     i = 0
     while True:
-        if group_id == groups_data['response'][i]['group_id']:
-            return groups_data['response'][i]['members']
+        if group_id == groups['response'][i]['group_id']:
+            return groups['response'][i]['members']
         i += 1
 
 
@@ -87,7 +85,7 @@ def prepare_user_dictionary(members_of_group_data):
 
 def analyze_group(group_id, user_id_mapped_to_user_data, number_of_messages):
 
-    response = requests.get('https://api.groupme.com/v3/groups/'+group_id+'/messages?token='+at)
+    response = requests.get('https://api.groupme.com/v3/groups/'+group_id+'/messages?token='+TOKEN)
     data = response.json()
     message_with_only_alphanumeric_characters = ''
     message_id = 0
@@ -163,7 +161,7 @@ def analyze_group(group_id, user_id_mapped_to_user_data, number_of_messages):
                 print(str(remaining)+' percent done')
 
         payload = {'before_id': message_id}
-        response = requests.get('https://api.groupme.com/v3/groups/'+group_id+'/messages?token='+at, params=payload)
+        response = requests.get('https://api.groupme.com/v3/groups/'+group_id+'/messages?token='+TOKEN, params=payload)
         data = response.json()
 
 
@@ -231,12 +229,14 @@ def display_data(user_id_mapped_to_user_data):
 print('If you have not done so already, go to the following website to receive your API token: ' +
       'https://dev.groupme.com/. When signing up, it does not matter what you put for the callback URL.' +
       'Alternately, click "Access Token" to use your account for authentication.')
-at = input("Enter your developer access token:")
+TOKEN = input("Enter your developer access token:")
 print("Here are your ten most recent groups:")
-groups_data = print_all_groups_with_number_beside_each()
+groups = get_groups()
+log_groups(groups)
+
 try:
-    group_number = int(raw_input("Enter the number of the group you would like to analyze:"))
-    group_id = get_group_id(groups_data, group_number)
-    prepare_analysis_of_group(groups_data, group_id)
+    group_number = int(input("Enter the number of the group you would like to analyze:"))
+    group_id = get_group_id(groups, group_number)
+    prepare_analysis_of_group(groups, group_id)
 except ValueError:
     print("Not a number")
