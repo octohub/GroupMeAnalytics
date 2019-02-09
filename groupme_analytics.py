@@ -229,7 +229,6 @@ print('If you have not done so already, go to the following website to receive y
       'https://dev.groupme.com/. When signing up, it does not matter what you put for the callback URL.' +
       'Alternately, click "Access Token" to use your account for authentication.')
 TOKEN = input("Enter your developer access token:")
-print("Here are your ten most recent groups:")
 groups = get_groups()
 log_groups(groups)
 
