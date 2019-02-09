@@ -14,48 +14,11 @@ def log_groups(groups):
         print("You are not part of any groups.")
         return
     for i, group in enumerate(groups):
-        print('%d. %s' % (i, group['name'))
+        print('%d. %s' % (i, group['name']))
 
 
-def analyze_group(group):
-    # Display basic group data before analysis
-    group_name = group['name']
-    number_of_messages = group['messages']['count']
-    print("Analyzing %d messages from %s" % (number_of_messages, group_name))
-
-    # Put all the members currently in group into a dict
-    group_members = group['members']
-    user_dictionary = prepare_user_dictionary(group_members)
-
-    #this line calls the "analyze_group" method which goes through the entire conversation
-    user_id_mapped_to_user_data = analyze_group(group_id, user_dictionary, number_of_messages)
-
-    #this line displays the data to the user
-    display_data(user_id_mapped_to_user_data)
-
-
-def get_group_name(groups, group_id):
-    i = 0
-    while True:
-        if group_id == groups['response'][i]['group_id']:
-            return groups['response'][i]['name']
-        i += 1
-
-
-def get_number_of_messages_in_group(groups, group_id):
-    i = 0
-    while True:
-        if group_id == groups['response'][i]['group_id']:
-            return groups['response'][i]['messages']['count']
-        i += 1
-
-
-def get_group_members(groups, group_id):
-    i = 0
-    while True:
-        if group_id == groups['response'][i]['group_id']:
-            return groups['response'][i]['members']
-        i += 1
+def new_user(name):
+    return
 
 
 def prepare_user_dictionary(group_members):
@@ -220,15 +183,30 @@ def display_data(user_id_mapped_to_user_data):
 
 
 print('If you have not done so already, go to the following website to receive your API token: ' +
-      'https://dev.groupme.com/. When signing up, it does not matter what you put for the callback URL.' +
+      'https://dev.groupme.com/. When signing up, it does not matter what you put for the callback URL. ' +
       'Alternately, click "Access Token" to use your account for authentication.')
 TOKEN = input("Enter your developer access token:")
 groups = get_groups()
 log_groups(groups)
 
 try:
-    group_number = int(input("Enter the number of the group you would like to analyze:"))
+    group_number = int(input("Enter the number of the group you would like to analyze: "))
 except ValueError:
     print("Not a number")
 
-analyze_group(groups[group_number])
+group = groups[group_number]
+
+# Display basic group data before analysis
+group_name = group['name']
+number_of_messages = group['messages']['count']
+print("Analyzing %d messages from %s" % (number_of_messages, group_name))
+
+# Put all the members currently in group into a dict
+group_members = group['members']
+user_dictionary = prepare_user_dictionary(group_members)
+
+# Iterate through messages to collect data
+user_id_mapped_to_user_data = analyze_group(group_id, user_dictionary, number_of_messages)
+
+# Show data
+display_data(user_id_mapped_to_user_data)
