@@ -25,7 +25,7 @@ def prepare_user_dictionary(members):
     return {member['user_id']: new_user(member['name']) for member in members}
 
 
-def analyze_group(group_id, users, message_count):
+def analyze_group(group, users, message_count):
     message_id = 0
     message_number = 0
     while message_number < message_count:
@@ -35,49 +35,50 @@ def analyze_group(group_id, users, message_count):
         }
         if message_id:
             params["before_id"] = message_id
-        response = requests.get("https://api.groupme.com/v3/groups/%d/messages?token=%s" % (group_id, at), params=params)
+        response = requests.get("https://api.groupme.com/v3/groups/%s/messages?token=%s" % (group['id'], TOKEN), params=params)
+        print(response)
         messages = response.json()["response"]["messages"]
         for message in messages:
-                name = message['name']
-                text = message['text']
-                try:
-                    #  strips out special characters
-                    message_with_only_alphanumeric_characters = re.sub(r'\W+', ' ', text)
-                except ValueError:
-                    pass  # this is here to catch errors when there are special characters in the message e.g. emoticons
-                sender_id = message['sender_id']
-                likers = message['favorited_by']
+            name = message['name']
+            text = message['text']
+            try:
+                #  strips out special characters
+                message_with_only_alphanumeric_characters = re.sub(r'\W+', ' ', text)
+            except ValueError:
+                pass  # this is here to catch errors when there are special characters in the message e.g. emoticons
+            sender_id = message['sender_id']
+            likers = message['favorited_by']
 
-                # Count words in message
-                message_word_count = len(re.findall(r'\w+', str(message_with_only_alphanumeric_characters)))
+            # Count words in message
+            message_word_count = len(re.findall(r'\w+', str(message_with_only_alphanumeric_characters)))
 
-                if sender_id not in users.keys():
-                    users[sender_id] = new_user(name)
+            if sender_id not in users.keys():
+                users[sender_id] = new_user(name)
 
-                # Fill in name if it's not in the dictionary
-                if not users[sender_id]['name']:
-                    users[sender_id]['name'] = name
+            # Fill in name if it's not in the dictionary
+            if not users[sender_id]['name']:
+                users[sender_id]['name'] = name
 
-                for user_id in likers:
-                    users[sender_id]['likes_by_member'][user_id] += 1
+            for user_id in likers:
+                users[sender_id]['likes_by_member'][user_id] += 1
 
-                # Count shared likes
-                for user_id in likers:
-                    for user_id_inner in likers:
-                        if user_id not in users.keys():
-                            # Leave name blank for now
-                            users[user_id] = new_user('')
-                        if user_id == user_id_inner:
-                            users[user_id]["self_likes"] += 1
-                            continue  # pass because you don't want to count yourself as sharing likes with yourself
-                        users[user_id]["shared_likes"][user_id_inner] += 1
-                users[sender_id]["messages_sent"] += 1  # add one to sent message count
-                users[sender_id]["likes_per_message"] += len(likers)
-                users[sender_id]["words_sent"] += message_word_count
+            # Count shared likes
+            for user_id in likers:
+                for user_id_inner in likers:
+                    if user_id not in users.keys():
+                        # Leave name blank for now
+                        users[user_id] = new_user('')
+                    if user_id == user_id_inner:
+                        users[user_id]["self_likes"] += 1
+                        continue  # pass because you don't want to count yourself as sharing likes with yourself
+                    users[user_id]["shared_likes"][user_id_inner] += 1
+            users[sender_id]["messages_sent"] += 1  # add one to sent message count
+            users[sender_id]["likes_per_message"] += len(likers)
+            users[sender_id]["words_sent"] += message_word_count
 
-            message_id = messages[-1]["id"]  # Get last message"s ID for next request
-            remaining = 100 * message_number / message_count
-            print("\r%.2f%% done" % remaining, end="")
+        message_id = messages[-1]["id"]  # Get last message's ID for next request
+        remaining = 100 * message_number / message_count
+        print("\r%.2f%% done" % remaining, end="")
 
 
 def display_data(users):
@@ -143,7 +144,7 @@ def display_data(users):
 print('If you have not done so already, go to the following website to receive your API token: ' +
       'https://dev.groupme.com/. When signing up, it does not matter what you put for the callback URL. ' +
       'Alternately, click "Access Token" to use your account for authentication.')
-TOKEN = input("Enter your developer access token:")
+TOKEN = input("Enter your developer access token: ")
 groups = get_groups()
 log_groups(groups)
 
@@ -161,10 +162,10 @@ print("Analyzing %d messages from %s" % (message_count, group_name))
 
 # Put all the members currently in group into a dict
 members = group['members']
-user_dictionary = prepare_user_dictionary(members)
+users = prepare_user_dictionary(members)
 
 # Iterate through messages to collect data
-users = analyze_group(group_id, user_dictionary, message_count)
+users = analyze_group(group, users, message_count)
 
 # Show data
 display_data(users)
