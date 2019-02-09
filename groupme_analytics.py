@@ -22,10 +22,7 @@ def new_user(name):
 
 
 def prepare_user_dictionary(members):
-    user_dictionary = {}
-    for member in members:
-        user_dictionary[member['user_id']] = new_user(member['name'])
-    return user_dictionary
+    return {member['user_id']: new_user(member['name']) for member in members}
 
 
 def analyze_group(group_id, user_id_mapped_to_user_data, number_of_messages):
