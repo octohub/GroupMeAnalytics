@@ -3,22 +3,8 @@ import re
 import sys
 from pprint import pprint
 
-at = ""  # this is a global variable that stores the API token
 
 def menu():
-    global at
-    print('If you have not done so already, go to the following website to receive your API token: ' +
-          'https://dev.groupme.com/. When signing up, it does not matter what you put for the callback URL.' +
-          'Alternately, click "Access Token" to use your account for authentication.')
-    at = input("Enter your developer access token:")
-    print("Here are your ten most recent groups:")
-    groups_data = print_all_groups_with_number_beside_each()
-    try:
-        group_number = int(raw_input("Enter the number of the group you would like to analyze:"))
-        group_id = get_group_id(groups_data, group_number)
-        prepare_analysis_of_group(groups_data, group_id)
-    except ValueError:
-        print("Not a number")
 
 
 def print_all_groups_with_number_beside_each():
@@ -241,7 +227,16 @@ def display_data(user_id_mapped_to_user_data):
     #uncomment this line below to view the raw dictionary
     #pprint(user_id_mapped_to_user_data)
 
-#this method call is here so the program starts right when you run it.
-menu()
 
-
+print('If you have not done so already, go to the following website to receive your API token: ' +
+      'https://dev.groupme.com/. When signing up, it does not matter what you put for the callback URL.' +
+      'Alternately, click "Access Token" to use your account for authentication.')
+at = input("Enter your developer access token:")
+print("Here are your ten most recent groups:")
+groups_data = print_all_groups_with_number_beside_each()
+try:
+    group_number = int(raw_input("Enter the number of the group you would like to analyze:"))
+    group_id = get_group_id(groups_data, group_number)
+    prepare_analysis_of_group(groups_data, group_id)
+except ValueError:
+    print("Not a number")
