@@ -17,21 +17,15 @@ def log_groups(groups):
         print('%d. %s' % (i, group['name'))
 
 
-def get_group_id(groups, group_number):
+def analyze_group(group):
+    # Display basic group data before analysis
+    group_name = group['name']
+    number_of_messages = group['messages']['count']
+    print("Analyzing %d messages from %s" % (number_of_messages, group_name))
 
-    group_id = groups['response'][group_number]['id']
-    return group_id
-
-
-def prepare_analysis_of_group(groups, group_id):
-    # these three lines simply display info to the user before the analysis begins
-    group_name = get_group_name(groups, group_id)
-    number_of_messages = get_number_of_messages_in_group(groups, group_id)
-    print("Analyzing "+str(number_of_messages) + " messages from " + group_name)
-
-    #these two lines put all the members currently in the group into a dictionary
-    members_of_group_data = get_group_members(groups, group_id)
-    user_dictionary = prepare_user_dictionary(members_of_group_data)
+    # Put all the members currently in group into a dict
+    group_members = group['members']
+    user_dictionary = prepare_user_dictionary(group_members)
 
     #this line calls the "analyze_group" method which goes through the entire conversation
     user_id_mapped_to_user_data = analyze_group(group_id, user_dictionary, number_of_messages)
@@ -64,13 +58,13 @@ def get_group_members(groups, group_id):
         i += 1
 
 
-def prepare_user_dictionary(members_of_group_data):
+def prepare_user_dictionary(group_members):
     user_dictionary = {}
     i = 0
     while True:
         try:
-            user_id = members_of_group_data[i]['user_id']
-            nickname = members_of_group_data[i]['nickname']
+            user_id = group_members[i]['user_id']
+            nickname = group_members[i]['nickname']
             user_dictionary[user_id] = [nickname, 0.0, 0.0, 0.0, 0.0, {}, {}, 0.0]
             # [0] = nickname, [1] = total messages sent in group, like count, [2] = likes per message,
             # [3] = average likes received per message, [4] = total words sent, [5] = dictionary of likes received from each member
@@ -234,7 +228,7 @@ log_groups(groups)
 
 try:
     group_number = int(input("Enter the number of the group you would like to analyze:"))
-    group_id = get_group_id(groups, group_number)
-    prepare_analysis_of_group(groups, group_id)
 except ValueError:
     print("Not a number")
+
+analyze_group(groups[group_number])
