@@ -18,7 +18,7 @@ def log_groups(groups):
 
 
 def new_user(name):
-    return {"name": name, "messages_sent": 0, "likes_given": 0, "likes_per_message": 0.0, "words_sent": 0, "likes_by_member": {}, "shared_likes": {}, "self_likes": 0}
+    return {"name": name, "messages_sent": 0, "likes_given": 0, "likes_received": 0.0, "words_sent": 0, "likes_by_member": {}, "shared_likes": {}, "self_likes": 0}
 
 
 def prepare_user_dictionary(members):
@@ -36,9 +36,10 @@ def analyze_group(group, users, message_count):
         if message_id:
             params["before_id"] = message_id
         response = requests.get("https://api.groupme.com/v3/groups/%s/messages?token=%s" % (group['id'], TOKEN), params=params)
-        print(response)
         messages = response.json()["response"]["messages"]
         for message in messages:
+            message_number += 1
+
             name = message['name']
             text = message['text']
             try:
@@ -73,41 +74,32 @@ def analyze_group(group, users, message_count):
                         continue  # pass because you don't want to count yourself as sharing likes with yourself
                     users[user_id]["shared_likes"][user_id_inner] += 1
             users[sender_id]["messages_sent"] += 1  # add one to sent message count
-            users[sender_id]["likes_per_message"] += len(likers)
+            users[sender_id]["likes_received"] += len(likers)
             users[sender_id]["words_sent"] += message_word_count
 
         message_id = messages[-1]["id"]  # Get last message's ID for next request
         remaining = 100 * message_number / message_count
         print("\r%.2f%% done" % remaining, end="")
+    return users
 
 
 def display_data(users):
     for key in users:
-        print(users[key][0] + ' Data:')
-        print('Messages Sent: ' + str(users[key][1]))
-        print('Total Likes Given: ' + str(users[key][7]))
         try:
-            print('Self Likes: ' + str(users[key][5][key]))
-            self_likes = users[key][5][key]
-        except KeyError:
-            self_likes = 0
-            print('Self Likes: ' + str(0))
-        print('Total Likes Received: ' + str(users[key][2]))
-        print('Average Likes Received Per Message: ' + str(users[key][3]))
+            likes_per_message = users[key]["likes_received"] / users[key]["messages_sent"]
+        except ZeroDivisionError:
+            likes_per_message = 0
+        print(('{name} | Messages sent: {messages}, Likes given: {likes}, Self-likes: {self_likes}, Likes received: {likes_received}, ' +
+            'Avg. Likes per message: {likes_per_message}, Words sent: {words_sent}'
+                ).format(name=users[key]["name"],
+                        messages=users[key]["messages_sent"],
+                        likes=users[key]["likes_given"],
+                        self_likes=users[key]["self_likes"],
+                        likes_received=users[key]["likes_received"],
+                        likes_per_message=likes_per_message,
+                        words_sent=users[key]["words_sent"]))
 
-        print('Total Likes Received with Self Likes Subtracted: ' +
-              str(users[key][2] - self_likes))
-
-        total_likes_minus_self_likes = users[key][2] - self_likes
-        try:
-            new_avg = total_likes_minus_self_likes / users[key][1]
-        except ZeroDivisionError:  # for the case where the user has sent 0 messages
-            new_avg = 0
-        print('Average Likes Received Per Message with Self Likes Subtracted: '
-              + str(new_avg))
-
-        print('Total Words Sent: ' + str(users[key][4]))
-
+        """
         print('Likes Received from each member and also what percent of the total likes received is from said member :')
         for key_inner in users[key][5]:
             percent = (users[key][5][key_inner] / users[key][2]) * 100
@@ -135,10 +127,7 @@ def display_data(users):
             sys.stdout.write(users[key_inner][0])
             sys.stdout.write(': ' + str(users[key][6][key_inner]) + ', ')
             sys.stdout.write(str(percent_shared)+'%, ')
-        print
-        print
-    #uncomment this line below to view the raw dictionary
-    #pprint(users)
+        """
 
 
 print('If you have not done so already, go to the following website to receive your API token: ' +
