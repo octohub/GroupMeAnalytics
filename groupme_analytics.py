@@ -61,7 +61,10 @@ def analyze_group(group, users, message_count):
                 users[sender_id]['name'] = name
 
             for user_id in likers:
-                users[sender_id]['likes_by_member'][user_id] += 1
+                if users[sender_id]['likes_by_member'].get(user_id):
+                    users[sender_id]['likes_by_member'][user_id] += 1
+                else:
+                    users[sender_id]['likes_by_member'][user_id] = 1
 
             # Count shared likes
             for user_id in likers:
