@@ -40,7 +40,7 @@ def analyze_group(group, users, message_count):
             message_number += 1
 
             name = message['name']
-            text = message['text']
+            text = message['text'] or ""
 
             # Word count
             for char in '-.,\n':
