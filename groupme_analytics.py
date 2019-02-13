@@ -96,7 +96,7 @@ def display_data(users):
         except ZeroDivisionError:
             likes_per_message = 0
         print(('{name} | Messages sent: {messages}, Likes given: {likes}, Self-likes: {self_likes}, Likes received: {likes_received}, ' +
-            'Avg. Likes per message: {likes_per_message}, Words sent: {words_sent}'
+            'Avg. Likes per message: {likes_per_message:.2f}, Words sent: {words_sent}'
                 ).format(name=users[key]["name"],
                         messages=users[key]["messages_sent"],
                         likes=users[key]["likes_given"],
