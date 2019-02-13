@@ -1,6 +1,7 @@
 import requests
 import sys
 from pprint import pprint
+import argparse
 
 
 def get_groups():
@@ -134,11 +135,17 @@ def display_data(users):
             sys.stdout.write(str(percent_shared)+'%, ')
         """
 
+parser = argparse.ArgumentParser(description='Analyze a GroupMe chat')
+parser.add_argument('token', help='Your GroupMe developer token')
+args = parser.parse_args()
 
-print('If you have not done so already, go to the following website to receive your API token: ' +
-      'https://dev.groupme.com/. When signing up, it does not matter what you put for the callback URL. ' +
-      'Alternately, click "Access Token" to use your account for authentication.')
-TOKEN = input("Enter your developer access token: ")
+TOKEN = args.token
+if not TOKEN:
+    print('If you have not done so already, go to the following website to receive your API token: ' +
+          'https://dev.groupme.com/. When signing up, it does not matter what you put for the callback URL. ' +
+          'Alternately, click "Access Token" to use your account for authentication.')
+    TOKEN = input("Enter your developer access token: ")
+
 groups = get_groups()
 log_groups(groups)
 
