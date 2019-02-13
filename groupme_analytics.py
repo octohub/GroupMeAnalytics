@@ -1,5 +1,4 @@
 import requests
-import re
 import sys
 from pprint import pprint
 
@@ -42,16 +41,14 @@ def analyze_group(group, users, message_count):
 
             name = message['name']
             text = message['text']
-            try:
-                #  strips out special characters
-                message_with_only_alphanumeric_characters = re.sub(r'\W+', ' ', text)
-            except ValueError:
-                pass  # this is here to catch errors when there are special characters in the message e.g. emoticons
+
+            # Word count
+            for char in '-.,\n':
+                text = text.replace(char, ' ')
+            message_word_count = len(text.split())
+
             sender_id = message['sender_id']
             likers = message['favorited_by']
-
-            # Count words in message
-            message_word_count = len(re.findall(r'\w+', str(message_with_only_alphanumeric_characters)))
 
             if sender_id not in users.keys():
                 users[sender_id] = new_user(name)
