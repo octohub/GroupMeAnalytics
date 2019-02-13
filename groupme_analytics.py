@@ -17,7 +17,7 @@ def log_groups(groups):
 
 
 def new_user(name):
-    return {"name": name, "messages_sent": 0, "likes_given": 0, "likes_received": 0.0, "words_sent": 0, "likes_by_member": {}, "shared_likes": {}, "self_likes": 0}
+    return {"name": name, "messages_sent": 0, "likes_given": 0, "likes_received": 0, "words_sent": 0, "likes_by_member": {}, "shared_likes": {}, "self_likes": 0}
 
 
 def prepare_user_dictionary(members):
