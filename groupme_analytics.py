@@ -105,35 +105,15 @@ def display_data(users):
                         likes_per_message=likes_per_message,
                         words_sent=users[key]['words_sent']))
 
-        """
-        print('Likes Received from each member and also what percent of the total likes received is from said member :')
-        for key_inner in users[key][5]:
-            percent = (users[key][5][key_inner] / users[key][2]) * 100
-            percent = round(percent, 2)
-            sys.stdout.write(users[key_inner][0])  # Name of liker
-            sys.stdout.write(' : ' + str(users[key][5][key_inner]) + ', ') # number of likes to user
-            sys.stdout.write(str(percent) + '%, ')
-        print
+        print('Portion of total likes received by member:', end=' ')
+        for key_inner in users[key]['likes_by_member']:
+            percent = (users[key]['likes_by_member'][key_inner] / users[key]['likes_given']) * 100
+            print('{name}: {percent}'.format(name=users[key_inner]['name'], percent=percent), end=' ')
 
-        print('Percent of each member\'s total likes that went to ' + str(users[key][0]) + ': ')
-        for key_inner in users[key][5]:
-            sys.stdout.write(users[key_inner][0])
-            convert_to_percent = (users[key][5][key_inner] /
-                                  users[key_inner][7]) * 100
-            convert_to_percent = round(convert_to_percent, 2)
-            sys.stdout.write(': ' + str(convert_to_percent) + '%, ')
-        print
-
-        test = users[key][6]
-        print('Number of times you liked the same post as another member and what percent of the posts you '
-              'liked were liked by that same member: ')
-        for key_inner in users[key][6]:
-            percent_shared = (users[key][6][key_inner]/users[key][7])*100
-            percent_shared = round(percent_shared, 2)
-            sys.stdout.write(users[key_inner][0])
-            sys.stdout.write(': ' + str(users[key][6][key_inner]) + ', ')
-            sys.stdout.write(str(percent_shared)+'%, ')
-        """
+        print('Like sharing rates:', end=' ')
+        for key_inner in users[key]['shared_likes']:
+            percent = (users[key]['shared_likes'][key_inner] / users[key]['likes_received']) * 100
+            print('{name}: {percent}'.format(name=users[key_inner]['name'], percent=percent), end=' ')
 
 parser = argparse.ArgumentParser(description='Analyze a GroupMe chat')
 parser.add_argument('token', help='Your GroupMe developer token')
