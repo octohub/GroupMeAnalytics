@@ -107,13 +107,22 @@ def display_data(users):
 
         print('Portion of total likes received by member:', end=' ')
         for key_inner in users[key]['likes_by_member']:
-            percent = (users[key]['likes_by_member'][key_inner] / users[key]['likes_given']) * 100
+            try:
+                percent = (users[key]['likes_by_member'][key_inner] / users[key]['likes_given']) * 100
+            except ZeroDivisionError:
+                percent = 0
             print('{name}: {percent}'.format(name=users[key_inner]['name'], percent=percent), end=' ')
+        print()
 
         print('Like sharing rates:', end=' ')
         for key_inner in users[key]['shared_likes']:
-            percent = (users[key]['shared_likes'][key_inner] / users[key]['likes_received']) * 100
+            try:
+                percent = (users[key]['shared_likes'][key_inner] / users[key]['likes_received']) * 100
+            except ZeroDivisionError:
+                percent = 0
             print('{name}: {percent}'.format(name=users[key_inner]['name'], percent=percent), end=' ')
+        print()
+        print()
 
 parser = argparse.ArgumentParser(description='Analyze a GroupMe chat')
 parser.add_argument('token', help='Your GroupMe developer token')
