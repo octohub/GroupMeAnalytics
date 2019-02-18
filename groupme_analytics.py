@@ -2,6 +2,7 @@ import requests
 import sys
 from pprint import pprint
 import argparse
+import csv
 
 
 def get_groups():
@@ -105,6 +106,7 @@ def display_data(users):
                         likes_per_message=likes_per_message,
                         words_sent=users[key]['words_sent']))
 
+        """
         print('Portion of total likes received by member:', end=' ')
         for key_inner in users[key]['likes_by_member']:
             try:
@@ -123,6 +125,18 @@ def display_data(users):
             print('{name}: {percent}'.format(name=users[key_inner]['name'], percent=percent), end=' ')
         print()
         print()
+        """
+
+def save(users):
+    """
+    Save user data to CSV file.
+    """
+    with open('users.csv', 'w+') as f:
+        writer = csv.writer(f)
+        columns = ['name', 'messages_sent', 'likes_given', 'self_likes', 'likes_received', 'words_sent']
+        writer.writerow(columns)
+        for key in users:
+            writer.writerow([users[key][column] for column in columns])
 
 parser = argparse.ArgumentParser(description='Analyze a GroupMe chat')
 parser.add_argument('token', help='Your GroupMe developer token')
@@ -159,3 +173,4 @@ users = analyze_group(group, users, message_count)
 
 # Show data
 display_data(users)
+save(users)
