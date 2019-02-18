@@ -67,13 +67,13 @@ def analyze_group(group, users, message_count):
 
             # Count shared likes
             for user_id in likers:
+                if user_id not in users.keys():
+                    # Leave name blank for now
+                    users[user_id] = new_user('')
+                if sender_id == user_id:
+                    users[sender_id]['self_likes'] += 1
+                    continue  # pass because you don't want to count yourself as sharing likes with yourself
                 for user_id_inner in likers:
-                    if user_id not in users.keys():
-                        # Leave name blank for now
-                        users[user_id] = new_user('')
-                    if sender_id == user_id:
-                        users[sender_id]['self_likes'] += 1
-                        continue  # pass because you don't want to count yourself as sharing likes with yourself
                     if users[user_id]['shared_likes'].get(user_id_inner):
                         users[user_id]['shared_likes'][user_id_inner] += 1
                     else:
