@@ -13,3 +13,6 @@ This program requires Python 3, which can be obtained [here](https://www.python.
 ```py
 python3 analyze.py xxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
+
+## Authorship & Licensing
+This software was created by [Richard Lucas](https://github.com/octohub) and enhanced by [Erik Boesen](https://github.com/ErikBoesen). It is available under the [MIT License](LICENSE).
