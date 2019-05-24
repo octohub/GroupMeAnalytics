@@ -1,33 +1,18 @@
-GroupMeAnalytics
-================
+# GroupMeAnalytics
+GroupMe (https://groupme.com/) provides an API (https://dev.groupme.com/docs/v3) that allows users to parse messages in groups they are a part of.
 
-Groupme (https://groupme.com/) provides an awesome API (https://dev.groupme.com/docs/v3) that allows users to parse conversations in groups they are a part of.
+This program compiles data on all users in one group. Information provided for each user includes the number of messages sent, number of likes iven, number of likes given to one's own messages, likes received, average number of likes received per message, total likes not including self likes, average likes per message without self likes, total number of words sent, rates of receiving and giving likes from and to each other member in the group, and rates of sharing likes with other members.
 
-**What information does it give me about the members in my groups?**
--Number of messages sent.
--Total Likes Given.
--Self Likes. (special rung in hell for people that like their own messages)
--Total Likes Received.
--Average Likes Received Per Message.
--Total Likes Received with Self Likes Subtracted.  (because inflating your numbers isn't cool)
--Average Likes Received Per Message with Self Likes Subtracted.
--Total Words Sent.
--Likes Received from each member and also what percent of the total likes received is from said member.
--Percent of each member's total likes that went to a particular member.
--Number of times you liked the same post as another member and what percent of the posts you liked were liked by that same member.
+## Prerequisites
+This program requires Python 3, which can be obtained [here](https://www.python.org/downloads).
 
-
-
-**How to use it?**
--Get your groupme API key using your regular account credentials by logging in here: https://dev.groupme.com/session/new
--Click the shiny orange button "Create Application" and fill out the form. Doesn't matter what you put in these fields, for the callback URL you can simply put in "https://example.com/oauth_callback"
--After that, go to your application page and you will see your access token
--Grab python 3 from here: https://www.python.org/downloads/
--Clone the repo and open the "groupme_analytics.py" file using with your Python IDE of choice. I recommend PyCharm. The Community Edition is free and you can grab that here: http://www.jetbrains.com/pycharm/download/
--Run the app, give your API key when prompted, and watch the magic!
-
-**Help!**
-Feel free to reach out to me on github or twitter(https://twitter.com/dickclucas).
+## Use
+- Obtain your GroupMe API Access Key using your regular account credentials by logging in [here](https://dev.groupme.com/session/new).
+- Click the button reading "Access Token" in the top right of the page. Take note of the token that is shown, but do not share it with anyone.
+- Run the app with your API key as a parameter:
+```py
+python3 analyze.py xxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
 
 **Here is data from one of my groups (with names changed of course):**
 Bob Data:
