@@ -6,7 +6,7 @@ import csv
 
 
 def get_groups():
-    response = requests.get('https://api.groupme.com/v3/groups?token='+TOKEN)
+    response = requests.get('https://api.groupme.com/v3/groups?token=' + TOKEN)
     return response.json()['response']
 
 

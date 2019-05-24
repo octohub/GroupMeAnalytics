@@ -1,7 +1,7 @@
 # GroupMeAnalytics
-GroupMe (https://groupme.com/) provides an API (https://dev.groupme.com/docs/v3) that allows users to parse messages in groups they are a part of.
+[GroupMe](https://groupme.com/) provides an API [(documentation)](https://dev.groupme.com/docs/v3) that allows users to parse messages in groups they are a part of.
 
-This program compiles data on all users in one group. Information provided for each user includes the number of messages sent, number of likes iven, number of likes given to one's own messages, likes received, average number of likes received per message, total likes not including self likes, average likes per message without self likes, total number of words sent, rates of receiving and giving likes from and to each other member in the group, and rates of sharing likes with other members.
+This program compiles data on all users in one group. Information provided for each user includes the number of messages sent, number of likes given, number of likes given to one's own messages, likes received, average number of likes received per message, total likes not including self likes, average likes per message without self likes, total number of words sent, rates of receiving and giving likes from and to each other member in the group, and rates of sharing likes with other members.
 
 ## Prerequisites
 This program requires Python 3, which can be obtained [here](https://www.python.org/downloads).
