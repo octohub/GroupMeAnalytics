@@ -144,10 +144,11 @@ args = parser.parse_args()
 
 TOKEN = args.token
 if not TOKEN:
+    from getpass import getpass
     print('If you have not done so already, go to the following website to receive your API token: ' +
           'https://dev.groupme.com/. When signing up, it does not matter what you put for the callback URL. ' +
           'Alternately, click "Access Token" to use your account for authentication.')
-    TOKEN = input('Enter your developer access token: ')
+    TOKEN = getpass('Enter your developer access token (hidden): ')
 
 groups = get_groups()
 log_groups(groups)
